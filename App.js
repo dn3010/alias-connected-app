@@ -8,6 +8,7 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+import create from './src/api';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,12 +19,29 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+
+  componentDidMount() {
+    this.createApi()
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to Sylo Connected App</Text>
       </View>
     );
+  }
+
+  async createApi() {
+    try {
+      console.log('Creating api');
+      const api = await create('wss://rimu.centrality.cloud/ws?apikey=045006ba-7fd4-49e2-bb95-a835e3935cce');
+
+      console.log('Created API');
+    }
+    catch(e) {
+      console.log('Failed to create API', e);
+    }
   }
 }
 
