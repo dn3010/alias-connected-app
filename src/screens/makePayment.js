@@ -4,6 +4,7 @@ import TextInput from '../base/textInput';
 import TextButton from '../base/textButton';
 import { colors } from '../constants';
 
+
 export default class MakePayment extends Component {
 
   constructor(props) {
@@ -12,11 +13,17 @@ export default class MakePayment extends Component {
     this.state = {
       amount: '100',
       to: '',
-      from: ''
+      from: '',
+      success: false,
     }
   }
 
   render() {
+    if (this.state.success) {
+      //TODO render something else
+    }
+
+
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Make a payment</Text>
@@ -33,9 +40,9 @@ export default class MakePayment extends Component {
           onChangeText={this.handleInputChange('to')}
         />
         <Text style={styles.subtitle}>Enter amount</Text>
-        <TextInput value={this.state.amount} onChangeText={this.handleInputChange('amount')}/>
+        <TextInput value={this.state.amount} onChangeText={this.handleInputChange('amount')} keyboardType='number-pad'/>
         <View style={{ height: 17 }}/>
-        <TextButton text={'Pay'}/>
+        <TextButton text={'Pay'} onPress={this.handleSubmit}/>
       </View>
     );
   }
@@ -45,6 +52,21 @@ export default class MakePayment extends Component {
     this.setState({
       [key]: value
     })
+  }
+
+  handleSubmit = async () => {
+    console.log('PAY STATE', this.state);
+
+    if (this.props.api) {
+      await this.props.api.sendPayment(this.state.to, this.state.amount)
+
+      this.setState({
+        amount: '100',
+        to: '',
+        from: '',
+        success: true,
+      });
+    }
   }
 }
 
