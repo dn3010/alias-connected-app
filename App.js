@@ -1,16 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import create from "./src/api";
-import TextButton from "./src/base/textButton";
+import TextButton from "./src/base/iconTextButton";
 import Welcome from "./src/screens/welcome";
+import ChooseDomain from "./src/screens/chooseDomain";
+import MakePayment from "./src/screens/makePayment";
 import { of } from "rxjs";
 var api = null;
 
@@ -24,21 +18,41 @@ const instructions = Platform.select({
 export default class App extends Component {
   constructor() {
     super();
-    this.state = { api: null };
+    this.state = { api: null, selectedComponent: "ChooseDomain" };
   }
   componentDidMount() {
     this.createApi();
   }
 
   render() {
+    const { selectedComponent } = this.state;
+
     if (this.state.api) {
       return (
         <View style={styles.container}>
           <View style={styles.tabContainer}>
-            <TextButton text="Pay Sylos" />
-            <TextButton text="Pay Sylos" />
+            <TextButton
+              onPress={() => {
+                this.setState({ selectedComponent: "ChooseDomain" });
+              }}
+              isSelected={selectedComponent === "ChooseDomain"}
+              text="Choose Domain"
+              image={require("./static/DNS.png")}
+            />
+            <TextButton
+              onPress={() => {
+                this.setState({ selectedComponent: "MakePayment" });
+              }}
+              isSelected={selectedComponent === "MakePayment"}
+              text="Make Payment"
+              image={require("./static/Wallet.png")}
+            />
           </View>
-          <Welcome api={this.state.api} />
+          {selectedComponent === "ChooseDomain" ? (
+            <ChooseDomain />
+          ) : (
+            <MakePayment />
+          )}
         </View>
       );
     }
@@ -50,7 +64,6 @@ export default class App extends Component {
       console.log("Creating api");
       const api = await create(
         "wss://rimu.centrality.cloud/ws?apikey=045006ba-7fd4-49e2-bb95-a835e3935cce"
-        // "ws://localhost:9944"
       );
       this.setState({ api });
       console.log("Created API");
@@ -78,6 +91,8 @@ const styles = StyleSheet.create({
   tabContainer: {
     marginTop: 16,
     marginHorizontal: 27,
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "space-around",
+    mar
   }
 });
