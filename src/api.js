@@ -25,7 +25,9 @@ export class Api {
 
   async getNames(address): Promise<string[]> {
     // TODO convert to useful type
-    return this.getQuery().Names(address);
+    const res = await this.getQuery().Names(address);
+
+    return res.toArray().map(n => n.toString());
   }
 
   async createDomain(name, time){
@@ -68,6 +70,9 @@ export class Api {
   }
 
   async submitTransaction(tx) {
+
+    //TODO
+    const keypair = null;
     return new Promise((resolve, reject) => {
       tx.signAndSend(keypair, ({ events = [], status, type }) => {
         if (status.isFinalized) {

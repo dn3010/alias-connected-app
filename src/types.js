@@ -2,7 +2,7 @@
 import {
   AccountId,
   U32,
-  Text
+  Text,
   Vector,
 } from '@plugnet/types';
 import { u8aToHex } from '@plugnet/util'

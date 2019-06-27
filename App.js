@@ -9,6 +9,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import create from './src/api';
+import TextButton from './src/base/textButton';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -28,6 +29,7 @@ export default class App extends Component<Props> {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to Sylo Connected App</Text>
+        <TextButton text={'hello world'} onPress={() => {}}/>
       </View>
     );
   }
