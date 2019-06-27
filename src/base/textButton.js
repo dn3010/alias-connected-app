@@ -22,14 +22,15 @@ export default class TextButton extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.blue,
-    paddingVertical: 10,
+    paddingVertical: 19,
     paddingHorizontal: 30,
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 3
   },
   text: {
     color: 'white',
-    fontSize: 25,
+    fontSize: 16,
   }
 });

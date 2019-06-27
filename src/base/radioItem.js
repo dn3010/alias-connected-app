@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   containerSelected: {
     opacity: 1,
     width: 115,
+    backgroundColor: colors.blueOpac,
     borderWidth: 3,
     borderColor: colors.blue,
   },
