@@ -1,68 +1,93 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import TextButton from "../base/textButton";
 import TextInput from "../base/textInput";
-import RadioItem from "../base/radioItem";
+import Radio from "../base/radio";
 
 export default class ChooseDomain extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      domain: '',
+      amount: 100,
+    }
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.view}>
           <Text style={styles.titleText}>Choose Your domain</Text>
         </View>
         <View style={[styles.view, { marginTop: 18 }]}>
-          <Text style={styles.walletAddressText}>Enter Wallet address</Text>
+          <Text style={styles.walletAddressText}>Your Wallet address</Text>
         </View>
         <View style={[styles.view, { marginTop: 6 }]}>
-          <Text style={styles.address}>0xFAc399E49F5B6867AF1863902WE</Text>
+          <Text style={styles.address}>{this.props.api.getOwnAddress()}</Text>
         </View>
         <View style={[styles.view, { marginTop: 35 }]}>
           <Text style={styles.chooseDomainSmall}>Choose domain</Text>
         </View>
         <View style={[styles.view, { marginTop: 17 }]}>
-          <TextInput style={{ marginHorizontal: -5, width: "100%" }} />
+          <TextInput style={{ width: "100%" }} value={this.state.domain} onChangeText={this.handleDomainChange}/>
         </View>
         <View style={[styles.view, { marginTop: 6 }]}>
           <Text style={styles.wowThisDomain}>
             Wow, this can be your new domain
           </Text>
         </View>
-        <View
-          style={[
-            styles.view,
-            { marginTop: 25, justifyContent: "space-between" }
-          ]}
-        >
-          <RadioItem title="1 Year" subtitle="100 Sylos" />
-          <RadioItem title="2 Year" subtitle="170 Sylos" />
-          <RadioItem title="3 Year" subtitle="280 Sylos" />
+        <View style={{ alignItems: 'center', justifyContent: 'center'}}>
+        <Radio
+          config={[{ title: '1 Year', subtitle: '100 Sylos'}, { title: '2 Year', subtitle: '170 Sylos'}, { title: '3 Year', subtitle: '280 Sylos'}]}
+          onSelection={this.handleAmountSelection}
+        />
         </View>
 
-        <View style={[styles.view, { marginTop: 12, width: "100%" }]}>
+        <View style={[{ marginTop: 12, width: "100%", justifyContent: "center",
+    alignItems: 'center',}]}>
           <Text style={styles.stealTheDeal}>Steal the deal</Text>
         </View>
-        <View style={[styles.view, { marginTop: 11 }]}>
-          <Text style={styles.youWillPay}>You will pay</Text>
-        </View>
-        <View style={[styles.view, { marginTop: 17 }]}>
-          <TextInput style={{ marginHorizontal: -5, width: "100%" }} />
-        </View>
-        <View style={[styles.view, { marginTop: 17 }]}>
-          <TextButton
-            style={{ marginHorizontal: -5, width: "100%" }}
-            text="Pay 170 Sylos"
-          />
-        </View>
-      </View>
+        <TextButton
+          style={{ width: "100%", marginTop: 17 }}
+          text={`Pay ${this.state.amount} Sylos`}
+          onPress={this.handleSubmit}
+        />
+      </ScrollView>
     );
+  }
+
+  handleAmountSelection = (index) => {
+    this.setState({ amount: index * 100})
+  }
+
+  handleDomainChange = (domain) => {
+    this.setState({ domain });
+  }
+
+
+  handleSubmit = async () => {
+    console.log('STATE', this.state)
+
+    if (this.props.api) {
+      try {
+        console.log('GETTING DOMAIN', this.state.domain);
+        await this.props.api.createDomain(this.state.domain);
+        console.log('SUCCESS!');
+      }
+      catch(e) {
+        console.log('Failed to get domain', e);
+      }
+
+    }
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    paddingHorizontal: 18,
     backgroundColor: "#F6F7F9"
   },
   welcome: {
@@ -90,7 +115,6 @@ const styles = StyleSheet.create({
     color: "#24253d"
   },
   view: {
-    marginHorizontal: 18,
     flexDirection: "row"
   },
   walletAddressText: {
@@ -127,15 +151,9 @@ const styles = StyleSheet.create({
     color: "#3bb217"
   },
   stealTheDeal: {
-    width: "100%",
     fontFamily: "Rawline",
     fontSize: 18,
-    fontWeight: "bold",
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "center",
     color: "#3389ee",
-    justifyContent: "center"
   },
   youWillPay: {
     fontFamily: "Lato",

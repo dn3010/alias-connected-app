@@ -7,6 +7,7 @@ const ALICE_SEED = 'Alice                           '; // leave as is
 
 const keyring = new Keyring({ type: 'ed25519' });
 const keypair = keyring.addFromSeed(stringToU8a(ALICE_SEED));
+console.log("ADDRESS", keypair.address)
 
 export class Api {
   cennznetClient= null
@@ -17,12 +18,18 @@ export class Api {
 
 
   getContract() {
-    return this.cennznetClient.tx.NameService;
+    console.log("MODULES", Object.keys(this.cennznetClient.tx));
+    return this.cennznetClient.tx.Names;
+  }
+
+  getOwnAddress() {
+    return keypair.address;
   }
 
 
   getQuery() {
-    return this.cennznetClient.query.NameService;
+
+    return this.cennznetClient.query.Names;
   }
 
   async getAddress(name): Promise<string> {
@@ -37,7 +44,7 @@ export class Api {
     return res.toArray().map(n => n.toString());
   }
 
-  async createDomain(name, time){
+  async createDomain(name){
     // throw new Error('Not implemented');
     const tx = this.getContract().create(
       new Name(name),

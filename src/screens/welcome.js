@@ -5,7 +5,7 @@ import ChooseDomain from "./chooseDomain";
 
 export default class Welcome extends Component {
   render() {
-    return <ChooseDomain />;
+    return <ChooseDomain {...this.props}/>;
     // return (
     //   <View style={styles.container}>
     //     <Text style={styles.welcome}>Welcome Screen</Text>

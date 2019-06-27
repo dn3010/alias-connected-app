@@ -50,6 +50,7 @@ export default class App extends Component {
       console.log("Creating api");
       const api = await create(
         "wss://rimu.centrality.cloud/ws?apikey=045006ba-7fd4-49e2-bb95-a835e3935cce"
+        // "ws://localhost:9944"
       );
       this.setState({ api });
       console.log("Created API");
