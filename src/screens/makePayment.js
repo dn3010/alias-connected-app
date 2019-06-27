@@ -4,6 +4,7 @@ import TextInput from '../base/textInput';
 import TextButton from '../base/textButton';
 import { colors } from '../constants';
 
+
 export default class MakePayment extends Component {
 
   constructor(props) {
@@ -49,6 +50,10 @@ export default class MakePayment extends Component {
 
   handleSubmit = () => {
     console.log('PAY STATE', this.state);
+
+    if (this.props.api) {
+      this.props.api.sendPayment(this.state.to, this.state.amount)
+    }
   }
 }
 

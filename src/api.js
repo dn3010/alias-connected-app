@@ -1,5 +1,12 @@
 const { Api: CennznetApi } = require('@cennznet/api');
+import { Keyring } from '@plugnet/keyring';
 import { Name, Names, SubscriptionTime } from './types';
+import { stringToU8a, u8aToHex } from '@plugnet/util';
+
+const ALICE_SEED = 'Alice                           '; // leave as is
+
+const keyring = new Keyring({ type: 'ed25519' });
+const keypair = keyring.addFromSeed(stringToU8a(ALICE_SEED));
 
 export class Api {
   cennznetClient= null
@@ -69,10 +76,16 @@ export class Api {
     return this.submitTransaction(tx);
   }
 
+  async sendPayment(name, amount) {
+    const address = await this.getAddress(name);
+
+    const tx = this.cennznetClient.genericAsset.transfer(16000, address, amount);;
+
+    return this.submitTransaction(tx);
+  }
+
   async submitTransaction(tx) {
 
-    //TODO
-    const keypair = null;
     return new Promise((resolve, reject) => {
       tx.signAndSend(keypair, ({ events = [], status, type }) => {
         if (status.isFinalized) {
