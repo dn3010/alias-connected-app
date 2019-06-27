@@ -33,9 +33,9 @@ export default class MakePayment extends Component {
           onChangeText={this.handleInputChange('to')}
         />
         <Text style={styles.subtitle}>Enter amount</Text>
-        <TextInput value={this.state.amount} onChangeText={this.handleInputChange('amount')}/>
+        <TextInput value={this.state.amount} onChangeText={this.handleInputChange('amount')} keyboardType='number-pad'/>
         <View style={{ height: 17 }}/>
-        <TextButton text={'Pay'}/>
+        <TextButton text={'Pay'} onPress={this.handleSubmit}/>
       </View>
     );
   }
@@ -45,6 +45,10 @@ export default class MakePayment extends Component {
     this.setState({
       [key]: value
     })
+  }
+
+  handleSubmit = () => {
+    console.log('PAY STATE', this.state);
   }
 }
 
