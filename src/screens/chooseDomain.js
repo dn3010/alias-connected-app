@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
 import TextButton from "../base/textButton";
 import TextInput from "../base/textInput";
 import Radio from "../base/radio";
@@ -12,10 +12,22 @@ export default class ChooseDomain extends Component {
     this.state = {
       domain: '',
       amount: 100,
+      success: false,
     }
   }
 
   render() {
+    if (this.state.success) {
+      //TODO
+
+      return <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1}}>
+        <Text style={{ fontSize: 40 }}>Congrats!</Text>
+        <Text style={{ fontSize: 30 }}>{`You just got ${this.state.domain}`}</Text>
+        <Image style={{ flex: 1, width: '70%' }} source={require('../../static/Gil.png')}/>
+      </View>
+    }
+
+
     return (
       <ScrollView style={styles.container}>
         <View style={styles.view}>
@@ -25,7 +37,7 @@ export default class ChooseDomain extends Component {
           <Text style={styles.walletAddressText}>Your Wallet address</Text>
         </View>
         <View style={[styles.view, { marginTop: 6 }]}>
-          <Text style={styles.address}>{this.props.api.getOwnAddress()}</Text>
+          <Text style={styles.address}>{this.props.api && this.props.api.getOwnAddress()}</Text>
         </View>
         <View style={[styles.view, { marginTop: 35 }]}>
           <Text style={styles.chooseDomainSmall}>Choose domain</Text>
@@ -75,6 +87,7 @@ export default class ChooseDomain extends Component {
         console.log('GETTING DOMAIN', this.state.domain);
         await this.props.api.createDomain(this.state.domain);
         console.log('SUCCESS!');
+        this.setState({ success: true });
       }
       catch(e) {
         console.log('Failed to get domain', e);

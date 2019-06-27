@@ -16,20 +16,24 @@ export class Api {
     this.cennznetClient = cennznetClient
   }
 
-
-  getContract() {
-    console.log("MODULES", Object.keys(this.cennznetClient.tx));
-    return this.cennznetClient.tx.Names;
-  }
-
   getOwnAddress() {
     return keypair.address;
   }
 
+  getContract() {
+    console.log("MODULES", Object.keys(this.cennznetClient.tx));
+
+    if (this.cennznetClient.tx.namesService) {
+      console.log("METHODS", Object.keys(this.cennznetClient.tx.namesService));
+    }
+    return this.cennznetClient.tx.namesService;
+  }
+
+
 
   getQuery() {
 
-    return this.cennznetClient.query.Names;
+    return this.cennznetClient.query.namesService;
   }
 
   async getAddress(name): Promise<string> {
@@ -118,7 +122,11 @@ export class Api {
 const create = async (endpoint) => {
   const cennznetApi = await CennznetApi.create({
     provider: endpoint,
-    types: [Name, Names]
+    types: {
+      Name,
+      Names,
+      "names_service::Name": Name
+    },
   });
 
   return new Api(cennznetApi);

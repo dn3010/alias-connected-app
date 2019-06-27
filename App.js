@@ -27,43 +27,39 @@ export default class App extends Component {
   render() {
     const { selectedComponent } = this.state;
 
-    if (this.state.api) {
-      return (
-        <View style={styles.container}>
-          <View style={styles.tabContainer}>
-            <TextButton
-              onPress={() => {
-                this.setState({ selectedComponent: "ChooseDomain" });
-              }}
-              isSelected={selectedComponent === "ChooseDomain"}
-              text="Choose Domain"
-              image={require("./static/DNS.png")}
-            />
-            <TextButton
-              onPress={() => {
-                this.setState({ selectedComponent: "MakePayment" });
-              }}
-              isSelected={selectedComponent === "MakePayment"}
-              text="Make Payment"
-              image={require("./static/Wallet.png")}
-            />
-          </View>
-          {selectedComponent === "ChooseDomain" ? (
-            <ChooseDomain />
-          ) : (
-            <MakePayment />
-          )}
-        </View>
-      );
-    }
-    return <View />;
+    return <View style={styles.container}>
+      <View style={styles.tabContainer}>
+        <TextButton
+          onPress={() => {
+            this.setState({ selectedComponent: "ChooseDomain" });
+          }}
+          isSelected={selectedComponent === "ChooseDomain"}
+          text="Choose Domain"
+          image={require("./static/DNS.png")}
+        />
+        <TextButton
+          onPress={() => {
+            this.setState({ selectedComponent: "MakePayment" });
+          }}
+          isSelected={selectedComponent === "MakePayment"}
+          text="Make Payment"
+          image={require("./static/Wallet.png")}
+        />
+      </View>
+      {selectedComponent === "ChooseDomain" ? (
+        <ChooseDomain />
+      ) : (
+        <MakePayment />
+      )}
+    </View>
   }
 
   async createApi() {
     try {
       console.log("Creating api");
       const api = await create(
-        "wss://rimu.centrality.cloud/ws?apikey=045006ba-7fd4-49e2-bb95-a835e3935cce"
+        // "wss://rimu.centrality.cloud/ws?apikey=045006ba-7fd4-49e2-bb95-a835e3935cce"
+        "ws://localhost:9944"
       );
       this.setState({ api });
       console.log("Created API");
@@ -93,6 +89,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 27,
     flexDirection: "row",
     justifyContent: "space-around",
-    mar
   }
 });
