@@ -13,11 +13,17 @@ export default class MakePayment extends Component {
     this.state = {
       amount: '100',
       to: '',
-      from: ''
+      from: '',
+      success: false,
     }
   }
 
   render() {
+    if (this.state.success) {
+      //TODO render something else
+    }
+
+
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Make a payment</Text>
@@ -48,11 +54,18 @@ export default class MakePayment extends Component {
     })
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     console.log('PAY STATE', this.state);
 
     if (this.props.api) {
-      this.props.api.sendPayment(this.state.to, this.state.amount)
+      await this.props.api.sendPayment(this.state.to, this.state.amount)
+
+      this.setState({
+        amount: '100',
+        to: '',
+        from: '',
+        success: true,
+      });
     }
   }
 }

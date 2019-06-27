@@ -1,6 +1,6 @@
 const { Api: CennznetApi } = require('@cennznet/api');
 import { Keyring } from '@plugnet/keyring';
-import { Name, Names, SubscriptionTime } from './types';
+import { Name, Names } from './types';
 import { stringToU8a, u8aToHex } from '@plugnet/util';
 
 const ALICE_SEED = 'Alice                           '; // leave as is
@@ -38,10 +38,9 @@ export class Api {
   }
 
   async createDomain(name, time){
-    throw new Error('Not implemented');
+    // throw new Error('Not implemented');
     const tx = this.getContract().create(
       new Name(name),
-      new SubscriptionTime(time)
     );
 
     return this.submitTransaction(tx);
@@ -112,7 +111,7 @@ export class Api {
 const create = async (endpoint) => {
   const cennznetApi = await CennznetApi.create({
     provider: endpoint,
-    types: [Name, Names, SubscriptionTime]
+    types: [Name, Names]
   });
 
   return new Api(cennznetApi);
