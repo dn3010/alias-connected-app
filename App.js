@@ -6,11 +6,13 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import create from './src/api';
-import TextButton from './src/base/textButton';
-import Radio from './src/base/radio';
+import React, { Component } from "react";
+import { Platform, StyleSheet, Text, View } from "react-native";
+import create from "./src/api";
+import TextButton from "./src/base/textButton";
+import Welcome from "./src/screens/welcome";
+import { of } from "rxjs";
+var api = null;
 
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
@@ -20,18 +22,27 @@ const instructions = Platform.select({
 });
 
 export default class App extends Component {
+  constructor() {
+    super();
+    this.state = { api: null };
+  }
   componentDidMount() {
     this.createApi();
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to Sylo Connected App</Text>
-        <Radio config={[{ title: '1 Year', subtitle: '100 Sylos'}, { title: '2 Year', subtitle: '170 Sylos'}, { title: '3 Year', subtitle: '280 Sylos'}]}/>
-        <TextButton text={'hello world'} onPress={() => {}}/>
-      </View>
-    );
+    if (this.state.api) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.tabContainer}>
+            <TextButton text="Pay Sylos" />
+            <TextButton text="Pay Sylos" />
+          </View>
+          <Welcome api={this.state.api} />
+        </View>
+      );
+    }
+    return <View />;
   }
 
   async createApi() {
@@ -40,7 +51,7 @@ export default class App extends Component {
       const api = await create(
         "wss://rimu.centrality.cloud/ws?apikey=045006ba-7fd4-49e2-bb95-a835e3935cce"
       );
-
+      this.setState({ api });
       console.log("Created API");
     } catch (e) {
       console.log("Failed to create API", e);
@@ -51,9 +62,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
+    backgroundColor: "#F6F7F9"
   },
   welcome: {
     fontSize: 20,
@@ -64,5 +73,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333333",
     marginBottom: 5
+  },
+  tabContainer: {
+    marginTop: 16,
+    marginHorizontal: 27,
+    flexDirection: "row"
   }
 });
